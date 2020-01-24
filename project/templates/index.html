@@ -1,0 +1,130 @@
+<head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script>
+		function timeSince(cr_date) {
+			date = new Date(cr_date);
+			var seconds = Math.floor((new Date() - date) / 1000 + 3600 * 3);
+
+			var interval = Math.floor(seconds / 31536000);
+
+			if (interval > 1) {
+				return interval + " years ago";
+			}
+			interval = Math.floor(seconds / 2592000);
+			if (interval > 1) {
+				return interval + " months ago";
+			}
+			interval = Math.floor(seconds / 86400);
+			if (interval > 1) {
+				return interval + " days ago";
+			}
+			interval = Math.floor(seconds / 3600);
+			if (interval > 1) {
+				return interval + " hours ago";
+			}
+			interval = Math.floor(seconds / 60);
+			if (interval > 1) {
+				return interval + " minutes ago";
+			}
+			if (seconds > 0) {
+				return Math.floor(seconds) + " seconds ago";
+			}
+			return "in the far future";
+		}
+	</script>
+</head>
+
+<style>
+	section {
+		display: flex;
+	}
+	div.main{
+		width: 50%;
+		align-items: center;
+		margin: auto;
+		margin-top: 100px;
+		margin-left: 0px;
+	}
+	ul.nav li:hover { color: #fff !important; }
+</style>
+
+<body>
+	<noscript>
+		<h3>Turn on your f***ing JavaScript or get the fuck out!</h3>
+	</noscript>
+	<div class="main" id="app" align="">
+		<ul class="list-group">
+			<h1>[[ description ]]</h1>
+			<li v-for="poll in polls" class="list-group-item list-group-item-action" :class="{ active: poll.access_token == selected }" @click="showDesc(poll.description); selected = poll.access_token">
+				<a >[[ poll.topic ]] - [[ timeSince(poll.cr_date) ]] </a>
+			</li>
+		</ul>
+	</div>
+</body>
+
+<script>
+	var app = new Vue({
+		delimiters: ['[[', ']]'],
+		el: '#app',
+		data: {
+				polls: null,
+				description: null,
+				selected: null,
+				hovered: null,
+				timer: null,
+		},
+		methods: {
+				timeSince2: function (cr_date) {
+					alert(timeSince(cr_date));
+				},
+				showDesc: function (desc) {
+					this.description = desc;
+					this.selected = null;
+				},
+				updatePolls: function () {
+					axios
+					.get("{% url 'votings:questions-list' %}")
+					.then(response => (this.polls = response.data));
+				},
+				timeSince: function (cr_date) {
+					date = new Date(cr_date);
+					var seconds = Math.floor((new Date() - date) / 1000 + 3600 * 3);
+
+					var interval = Math.floor(seconds / 31536000);
+
+					if (interval > 1) {
+						return interval + " years ago";
+					}
+					interval = Math.floor(seconds / 2592000);
+					if (interval > 1) {
+						return interval + " months ago";
+					}
+					interval = Math.floor(seconds / 86400);
+					if (interval > 1) {
+						return interval + " days ago";
+					}
+					interval = Math.floor(seconds / 3600);
+					if (interval > 1) {
+						return interval + " hours ago";
+					}
+					interval = Math.floor(seconds / 60);
+					if (interval > 1) {
+						return interval + " minutes ago";
+					}
+					if (seconds > 0) {
+						return Math.floor(seconds) + " seconds ago";
+					}
+					return "in the far future";
+				}
+		},
+		beforeMount: function() {
+					this.updatePolls();
+					this.timer = setInterval(this.updatePolls, 30 * 1000)
+				},
+	});
+</script>
