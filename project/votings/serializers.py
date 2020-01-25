@@ -28,3 +28,4 @@ class ChoiceSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Choice
 		fields = ('label', 'votes', 'question')
+		read_only_fields = ('question',)
