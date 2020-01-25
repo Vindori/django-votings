@@ -10,5 +10,5 @@ router.register(r'questions', views.QuestionViewSet, basename='questions')
 
 urlpatterns = [
 	path('api/', include(router.urls)),
-	path('', views.index)
+	path('', views.index, name='index')
 ]
