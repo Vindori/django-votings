@@ -1,6 +1,6 @@
 var app = new Vue({
-	delimiters: ['[[', ']]'],
-	el: '#app',
+	delimiters: ["[[", "]]"],
+	el: "#app",
 	data: {
 			polls: null,
 			description: null,
@@ -9,19 +9,19 @@ var app = new Vue({
 			username: null,
 			password: null,
 			errors: [],
+			token: null,
 	},
 	methods: {
 			logIn: function () {
-				let data = { 'username': this.username,
-				'password': this.password };
+				let data = { "username": this.username,
+				"password": this.password };
 				console.log(data);
 				axios
-				.post({% url 'api_auth' %}, data)
+				.post({% url "api_auth" %}, data)
 				.then((response) =>{
-					let token = response.data.token;
-					axios.defaults.headers.common['Authorization'] = `Token ${token}`;
-					localStorage.setItem("token", token);
+					this.token = response.data.token;
 				})
+				this.updatePolls();
 			},
 			timeSince2: function (cr_date) {
 				alert(timeSince(cr_date));
@@ -31,10 +31,8 @@ var app = new Vue({
 				this.selected = null;
 			},
 			updatePolls: function () {
-				let token = localStorage.getItem("token");
-				axios.defaults.headers.common['Authorization'] = `Token ${token}`;
 				axios
-				.get("{% url 'votings:questions-list' %}")
+				.get("{% url "votings:questions-list" %}")
 				.then(response => (this.polls = response.data),
 					  error => (this.errors.push(error))
 				);
@@ -71,12 +69,20 @@ var app = new Vue({
 			}
 	},
 	watch: {
-		// errors: function() {
-		// 	this.errors = [];
-		// }
+		token: function() {
+			localStorage.setItem("token", this.token);
+			axios.defaults.headers.common["Authorization"] = `Token ${this.token}`;
+			if (!this.token) {
+				axios.defaults.headers.common["Authorization"] = "";
+			}
+		}
 	},
 	mounted: function() {
-				this.updatePolls();
-				this.timer = setInterval(this.updatePolls, 30 * 1000);
-			},
+		this.token = localStorage.getItem("token");
+		if (this.token) {
+			axios.defaults.headers.common["Authorization"] = `Token ${this.token}`;
+		}
+		this.updatePolls();
+		this.timer = setInterval(this.updatePolls, 30 * 1000);
+	},
 });

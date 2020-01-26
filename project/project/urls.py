@@ -16,12 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import redirect
-
-from rest_framework.authtoken.views import obtain_auth_token
+from votings.views import CustomAuthToken
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('votings/', include('votings.urls')),
     path('', lambda req: redirect('votings:index')),
-    path('api-auth/', obtain_auth_token, name='api_auth'),
+    path('api-auth/', CustomAuthToken.as_view(), name='api_auth'),
 ]

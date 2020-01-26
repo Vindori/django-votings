@@ -7,9 +7,11 @@ from .forms import LoginForm
 from django.shortcuts import render
 
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.views import ObtainAuthToken
 
 import json
 import random
@@ -31,12 +33,31 @@ class QuestionViewSet(viewsets.ModelViewSet):
     def list(self, request):
         queryset = self.queryset.filter(public=True).order_by('-cr_date')
         s = self.serializer_class(queryset, many=True)
-        return Response(s.data)
+        response = [
+            {key: x[key] for key in ['access_token', 'topic']}
+            for x in s.data
+        ]
+        return Response(response)
 
-    def my(self, request):
-        queryset = self.queryset.filter(author=1).order_by('-cr_date')
-        s = self.serializer_class(queryset, many=True)
-        return Response(s.data)
+
+class CustomAuthToken(ObtainAuthToken):
+
+    def get(self, request):
+
+        user = request.user
+        if not user.is_authenticated:
+            return Response({'error': 'you must be authenticated'}, status=401)
+        else:
+            questions = Question.objects.filter(author_id=1)
+            q = QuestionSerializer(questions, many=True)
+            response = [
+                {key: x[key] for key in ['access_token', 'topic']}
+                for x in q.data
+            ]
+            return Response({
+                'username': str(user),
+                'questions': response,
+            })
 
 
 def index(request):

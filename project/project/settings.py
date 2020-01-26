@@ -25,7 +25,7 @@ SECRET_KEY = '%k2chhjt#jnf9p05^!kq9+7b!*78xt7j$3-g8xc$dxak4x#_9^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.22', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['polls.vindori.online', 'vindori.ru']
 
 
 # Application definition
@@ -127,6 +127,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+# E-mail configuration
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'vindori@vindori.ru'
+EMAIL_HOST_PASSWORD = '%REMOVED%'
+EMAIL_USE_TLS = True
 
 # Third party
 
