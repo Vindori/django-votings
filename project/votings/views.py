@@ -25,8 +25,6 @@ def get_base_context(request):
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 

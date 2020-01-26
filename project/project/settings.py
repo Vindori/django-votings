@@ -25,7 +25,7 @@ SECRET_KEY = '%k2chhjt#jnf9p05^!kq9+7b!*78xt7j$3-g8xc$dxak4x#_9^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['polls.vindori.online', 'vindori.ru']
+ALLOWED_HOSTS = ['polls.vindori.online', 'vindori.ru', 'localhost']
 
 
 # Application definition

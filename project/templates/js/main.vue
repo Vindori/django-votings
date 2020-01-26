@@ -3,7 +3,7 @@ var app = new Vue({
 	el: "#app",
 	data: {
 			polls: null,
-			description: null,
+			poll: {},
 			selected: null,
 			timer: null,
 			username: null,
@@ -21,14 +21,14 @@ var app = new Vue({
 				.then((response) =>{
 					this.token = response.data.token;
 				})
-				this.updatePolls();
-			},
-			timeSince2: function (cr_date) {
-				alert(timeSince(cr_date));
 			},
 			showDesc: function (desc) {
-				this.description = desc;
-				this.selected = null;
+				axios
+				.get(`{% url "votings:questions-list" %}${desc}/`)
+				.then(response => (this.poll = response.data),
+					  error => (this.errors.push(error))
+				);
+
 			},
 			updatePolls: function () {
 				axios
@@ -75,6 +75,7 @@ var app = new Vue({
 			if (!this.token) {
 				axios.defaults.headers.common["Authorization"] = "";
 			}
+			this.updatePolls();
 		}
 	},
 	mounted: function() {
@@ -82,7 +83,6 @@ var app = new Vue({
 		if (this.token) {
 			axios.defaults.headers.common["Authorization"] = `Token ${this.token}`;
 		}
-		this.updatePolls();
 		this.timer = setInterval(this.updatePolls, 30 * 1000);
 	},
 });

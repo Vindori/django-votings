@@ -44,12 +44,14 @@
 				<li
 				v-for="poll in polls"
 				class="list-group-item list-group-item-action" :class="{ active: poll.access_token == selected }"
-				@click="showDesc(poll.description); selected = poll.access_token">
-					<a >[[ poll.topic ]]</a>
+				@click="showDesc(poll.access_token); selected = poll.access_token">
+					<a>[[ poll.topic ]]</a>
 				</li>
 			</ul>
 		</div>
-		<h1>[[ description ]]</h1>
+		<h1>[[ poll.topic ]]</h1>
+		<h2>[[ poll.description ]]</h2>
+		<h3>[[ poll.choices ]]</h3>
 	</div>
 </body>
 
