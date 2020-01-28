@@ -6,29 +6,35 @@ var app = new Vue({
 			poll: {},
 			selected: null,
 			timer: null,
-			username: null,
-			password: null,
-			errors: [],
+			login_form: {},
+			signup_form: {},
 			token: null,
 	},
 	methods: {
 			logIn: function () {
-				let data = { "username": this.username,
-				"password": this.password };
+				let data = this.login_form;
 				console.log(data);
 				axios
 				.post({% url "api_auth" %}, data)
 				.then((response) =>{
 					this.token = response.data.token;
-				})
+				});
 			},
-			showDesc: function (desc) {
+			signUp: function () {
+				let data = this.signup_form;
+				console.log(data);
+				axios
+				.put({% url "api_auth" %}, data)
+				.then((response) =>{
+					console.log(response.data);
+				});
+			},
+			showPoll: function (desc) {
 				axios
 				.get(`{% url "votings:questions-list" %}${desc}/`)
 				.then(response => (this.poll = response.data),
 					  error => (this.errors.push(error))
 				);
-
 			},
 			updatePolls: function () {
 				axios

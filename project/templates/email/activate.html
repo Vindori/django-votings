@@ -1,0 +1,4 @@
+{% autoescape off %}
+Hi {{ user.username }},
+Please click on <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">the link</a> to confirm your registration.
+{% endautoescape %}

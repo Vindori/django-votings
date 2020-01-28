@@ -13,14 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.views.generic import RedirectView
 from django.urls import path, include
 from django.shortcuts import redirect
-from votings.views import CustomAuthToken
+from votings.views import AuthAPI, activate
+from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('votings/', include('votings.urls')),
     path('', lambda req: redirect('votings:index')),
-    path('api-auth/', CustomAuthToken.as_view(), name='api_auth'),
+    path('api-auth/', AuthAPI.as_view(), name='api_auth'),
+    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico'), name='favicon'),
+    path('activate/<uidb64>/<token>/', activate, name='activate'),
 ]

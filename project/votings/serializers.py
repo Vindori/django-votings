@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Question, Choice
 
@@ -13,7 +14,8 @@ class ChoiceSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
-        validated_data['author_id'] = '1'
+        user = self.context.get('request').user
+        validated_data['author'] = user
         choices = validated_data.pop('choices')
         # TODO: check that user can't set 'votes' value
         question = Question.objects.create(**validated_data)
@@ -30,9 +32,10 @@ class QuestionSerializer(serializers.ModelSerializer):
         return validated_data
 
     choices = ChoiceSerializer(many=True)
+    author = serializers.StringRelatedField()
 
     class Meta:
         model = Question
         fields = ('topic', 'description', 'cr_date',
-                  'access_token', 'author_id', 'public', 'choices')
-        read_only_fields = ('access_token', 'author_id', 'cr_date')
+                  'access_token', 'author', 'public', 'choices')
+        read_only_fields = ('access_token', 'author', 'cr_date')
