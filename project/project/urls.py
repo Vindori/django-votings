@@ -20,10 +20,11 @@ from votings.views import AuthAPI, activate
 from django.contrib import admin
 
 urlpatterns = [
+    path('', lambda req: redirect('votings:index')),
     path('admin/', admin.site.urls),
     path('votings/', include('votings.urls')),
-    path('', lambda req: redirect('votings:index')),
     path('api-auth/', AuthAPI.as_view(), name='api_auth'),
-    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico'), name='favicon'),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
+    path('favicon.ico', RedirectView.as_view(
+        url='/static/images/favicon.ico'), name='favicon'),
 ]

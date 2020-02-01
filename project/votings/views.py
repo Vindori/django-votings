@@ -18,8 +18,35 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.views import ObtainAuthToken
 
-import json
-import random
+
+class VoteAPI(APIView):
+
+    def get(self, request):
+        return Response(
+            {'error': 'Method GET is not allowed.'},
+            status=405)
+
+    def post(self, request):
+        data = dict(request.data)
+        question_token = data.get('question')
+        vote_id = data.get('id')
+        
+        question = Question.objects.filter(pk=question_token)[0]
+        choice = Choice.objects.filter(
+            id=vote_id,
+            question=question
+        )[0]
+
+        if choice:
+            choice.votes += 1
+            choice.save()
+            return Response(
+                {'success': 'Your vote has been saved.'},
+                status=200)
+        else:
+            return Response(
+                {'error': 'No such choice.'},
+                status=404)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -43,8 +70,7 @@ class AuthAPI(ObtainAuthToken):
         if not user.is_authenticated:
             return Response(
                 {'error': 'You must be authenticated.'},
-                status=401
-            )
+                status=401)
         else:
             questions = Question.objects.filter(author=user)
             q = QuestionSerializer(questions, many=True)
@@ -54,29 +80,35 @@ class AuthAPI(ObtainAuthToken):
             ]
             return Response({
                 'username': str(user),
-                'questions': response,
-            })
+                'questions': response})
 
     def put(self, request):
-        data = json.loads(request.body)
+        data = request.data
         username = data.get('username', '')
         password = data.get('password', '')
         email = data.get('email', '')
         if not (username and password and email):
             return Response(
                 {'error': 'Bad request.'},
-                status=400
-            )
+                status=400)
+
         if User.objects.filter(username=username) | User.objects.filter(email=email):
             return Response(
                 {'error': 'This user already exists.'},
-                status=406
-            )
+                status=406)
+
         user = User.objects.create_user(
             username,
             email,
             password,
         )
+
+        if not config.USE_EMAIL_CONFIRMATION:
+            return Response(
+                {'success': 'Your account has been created.'},
+                status=200)
+
+        user.is_active = False
         user.save()
         current_site = get_current_site(request)
         subject = 'Polls. Activate your account.'
@@ -86,24 +118,23 @@ class AuthAPI(ObtainAuthToken):
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
         })
-        email = send_mail(
+        sent = send_mail(
             subject,
             message,
             'vindori@vindori.ru',
             [email],
-            fail_silently=True
+            fail_silently=True,
+            html_message=message
         )
-        if email:
+        if sent:
             return Response(
                 {'success': 'Please confirm your email address to complete the registration.'},
-                status=200
-            )
+                status=200)
         else:
             user.delete()
             return Response(
                 {'error': 'An error occurred. Try later'},
-                status=500
-            )
+                status=500)
 
 
 def activate(request, uidb64, token):

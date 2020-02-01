@@ -130,10 +130,12 @@ STATIC_URL = '/static/'
 
 # E-mail configuration
 
+USE_EMAIL_CONFIRMATION = True
+
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'vindori@vindori.ru'
-EMAIL_HOST_PASSWORD = '%REMOVED%'
+EMAIL_HOST_PASSWORD = '7taU@5zpUak4AQZ'
 EMAIL_USE_TLS = True
 
 # Third party
