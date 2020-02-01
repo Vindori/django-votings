@@ -72,11 +72,10 @@ class AuthAPI(ObtainAuthToken):
                 {'error': 'This user already exists.'},
                 status=406
             )
-        user = User(
-            username=username,
-            password=password,
-            email=email,
-            is_active=False
+        user = User.objects.create_user(
+            username,
+            email,
+            password,
         )
         user.save()
         current_site = get_current_site(request)
