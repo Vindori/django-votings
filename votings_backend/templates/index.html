@@ -1,0 +1,49 @@
+<head>
+	{% load static %}
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+
+<style>
+	div.main{
+		align-items: center;
+		margin: auto;
+		margin-left: 0px;
+		margin-top: 50px;
+	}
+	.wrapper {
+		display: flex;
+		width: 100%;
+		align-items: stretch;
+	}
+</style>
+
+<body>
+	<div id="app">
+		<header>
+			{% include 'header.html' %}
+		</header>
+		<div class="main wrapper">
+			<ul class="list-group">
+				<li
+				v-for="poll in polls"
+				class="list-group-item list-group-item-action"
+				:class="{ active: poll.access_token == selected }"
+				@click="showPoll(poll.access_token); selected = poll.access_token">
+					<a>[[ poll.topic ]]</a>
+				</li>
+			</ul>
+		</div>
+		<h1>[[ poll.topic ]]</h1>
+		<h2>[[ poll.description ]]</h2>
+		<h3 v-for="choice in poll.choices">[[ choice.label ]]: [[ choice.votes ]]</h3>
+	</div>
+</body>
+
+<script>
+	{% include 'js/main.vue' %}
+</script>

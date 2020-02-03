@@ -1,0 +1,44 @@
+{% load static %}
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container d-flex justify-content-between">
+        <a class="navbar-brand" href="#">
+            <img width="40px" height="40px" src="{% static 'images/logo.png' %}">
+            Polls
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="btn btn-danger btn-block">Add poll</li>
+            </ul>
+            <li class="navbar-nav mr-right nav-item dropdown dropdown-menu-right">
+                <a class="btn btn-outline-primary my-2 my-sm-0 dropdown-toggle" href="#" id="navbarDropdown"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Log In</a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <form class="w-100 px-4 py-3">
+                        {% csrf_token %}
+                        {% for field in loginform.visible_fields %}
+                            <div class="form-group form-inline">{{ field }}</div>
+                        {% endfor %}
+                        <li @click="logIn()" class="btn btn-primary btn-block">Go for it!</li>
+                    </form>
+                </div>
+            </li>
+            <li class="navbar-nav mr-right nav-item dropdown dropdown-menu-right">
+                <a class="btn btn-outline-primary my-2 my-sm-0 dropdown-toggle" href="#" id="navbarDropdown"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sign Up</a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <form class="w-100 px-4 py-3">
+                        {% csrf_token %}
+                        {% for field in signupform.visible_fields %}
+                            <div class="form-group form-inline">{{ field }}</div>
+                        {% endfor %}
+                        <li @click="signUp()" class="btn btn-primary btn-block">Go for it!</li>
+                    </form>
+                </div>
+            </li>
+        </div>
+    </div>
+</nav>
