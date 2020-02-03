@@ -1,7 +1,7 @@
 # The Votings app
 Python web application for creating polls.
 Backend is written in Django + Django Rest Framework
-Frontend is developed using one of the most powerful reactive JS frameworkc - Vue.JS
+Frontend is developed using one of the most powerful reactive JS framework - Vue.JS
 
 ## Installation
 1. Run `pip install -r requrement.txt` in [votings_backend](/votings_backend).
