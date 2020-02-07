@@ -5,9 +5,9 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.conf import settings
 
-from .models import Question, Choice
-from .forms import LoginForm, SignupForm
+from .models import Question, Choice, Voter
 from .tokens import account_activation_token
 from .serializers import QuestionSerializer, ChoiceSerializer
 
@@ -27,17 +27,23 @@ class VoteAPI(APIView):
             status=405)
 
     def post(self, request):
+        user = request.user
         data = dict(request.data)
         question_token = data.get('question')
         vote_id = data.get('id')
-        
+
         question = Question.objects.filter(pk=question_token)[0]
         choice = Choice.objects.filter(
             id=vote_id,
             question=question
         )[0]
-
+        voter = Voter.objects.filter(question=question, user=user)
+        if voter:
+            return Response(
+                {'error': 'You have already voted.'},
+                status=403)
         if choice:
+            Voter.objects.create(question=question, user=user)
             choice.votes += 1
             choice.save()
             return Response(
@@ -103,7 +109,7 @@ class AuthAPI(ObtainAuthToken):
             password,
         )
 
-        if not config.USE_EMAIL_CONFIRMATION:
+        if not settings.USE_EMAIL_CONFIRMATION:
             return Response(
                 {'success': 'Your account has been created.'},
                 status=200)
@@ -139,25 +145,15 @@ class AuthAPI(ObtainAuthToken):
 
 def activate(request, uidb64, token):
     try:
-        print(uidb64)
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
 
     except(TypeError, ValueError, OverflowError, User.DoesNotExist) as e:
-        print(e)
         user = None
 
     if user and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        return redirect('votings:index')
+        return 'Your account has been activated.'
     else:
         return 'Activation link is invalid!'
-
-
-def index(request):
-    context = {
-        'loginform': LoginForm(),
-        'signupform': SignupForm()
-    }
-    return render(request, 'index.html', context)

@@ -32,7 +32,12 @@ class Choice(models.Model):
     label = models.CharField(max_length=30)
     votes = models.IntegerField(default=0)
     question = models.ForeignKey(
-        'Question', on_delete=models.CASCADE, related_name='choices')
+        Question, on_delete=models.CASCADE, related_name='choices')
 
     def __str__(self):
         return self.label
+
+
+class Voter(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

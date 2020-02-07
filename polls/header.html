@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Poll</title>
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+	<!-- Icons -->
+	<link href="assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
+	<link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+	<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/style_sidebar.css">
+	<!-- Argon CSS -->
+	<link type="text/css" href="assets/css/argon.css" rel="stylesheet">
+	<link type="text/css" href="css/vote.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+<body>
+	
+	<!-- Шапка -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-default nav_header">
+    <div class="container">
+        <a class="navbar-brand nav_logo mr-lg-auto" href="#">POLLS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-default" aria-controls="navbar-default" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-default">
+            <div class="navbar-collapse-header">
+                <div class="row">
+                    <div class="col-6 collapse-brand">
+                        <a href="index.html">
+                            <img src="assets/img/brand/blue.png">
+                        </a>
+                    </div>
+                    <div class="col-6 collapse-close">
+                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-default" aria-controls="navbar-default" aria-expanded="false" aria-label="Toggle navigation">
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="navbar-nav ml-lg-auto ml-5 nav_text">
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon" href="#">
+                        <span class="nav-link-inner--text">Profile</span>
+                    </a>
+                </li> 
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon" href="#">
+                        <span class="nav-link-inner--text">Posts</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon" href="login.html">
+                        <span class="nav-link-inner--text">Login</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon" href="#">
+                        <span class="nav-link-inner--text">Register</span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+<!--sidebar!-->
+		<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar">
+				<div class="custom-menu">
+					<button type="button" id="sidebarCollapse" class="btn btn-primary">
+	          <i class="fa fa-bars"></i>
+	          <span class="sr-only">Toggle Menu</span>
+	        </button>
+        </div>
+				<div class="p-4 pt-5">
+		  		<h1><a href="index.html" class="logo">Public<a></h1>
+	        <ul class="list-unstyled components mb-5">
+	          <li class="active">
+	            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Polls</a>
+	            <ul class="collapse list-unstyled" id="homeSubmenu">
+                <li>
+                    <a href="#">Public</a>
+                </li>
+                <li>
+                    <a href="#">My</a>
+                </li>
+	            </ul>
+	          </li>
+	        </ul>
+
+	      </div>
+    	</nav>
+
+		<div class="poll">
+			<h1 class="poll_label">Putin or Trump</h1>	
+			<p class="poll_desc">I dont know how to write desc, but I know that Vindori lox.</p>
+			<div class="poll-btn-cont">
+				<button type="button" class="btn btn-vote btn-outline-default btn-lg btn-block">Putin</button>
+			</div>
+			<div class="poll-btn-cont">
+				<button type="button" class="btn btn-vote btn-outline-default btn-lg btn-block">Trump</button>
+			</div>
+		</div>
+
+	<!-- Core -->
+	<script src="assets/vendor/jquery/jquery.min.js"></script>
+	<script src="assets/vendor/popper/popper.min.js"></script>
+	<script src="assets/vendor/bootstrap/bootstrap.min.js"></script>
+	<script src="../sidebar-02/js/main_sidebar.js"></script>
+	<!-- Theme JS -->
+	<script src="assets/js/argon.js"></script>
+	</body>
+</html>

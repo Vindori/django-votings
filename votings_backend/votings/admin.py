@@ -12,9 +12,10 @@ class ChoiceInline(admin.TabularInline):
 
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,               {'fields': ['topic']}),
+        (None,               {'fields': ['topic', 'description']}),
         ('Date information', {'fields': ['cr_date'],
                               'classes': ['collapse']}),
+        ('Author', {'fields': ['author']})
     ]
     inlines = [ChoiceInline]
     list_display = ('topic', 'cr_date', 'access_token', 'public')

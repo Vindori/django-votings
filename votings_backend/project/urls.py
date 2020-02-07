@@ -22,8 +22,4 @@ from django.contrib import admin
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('votings.urls')),
-    path('api/auth/', AuthAPI.as_view(), name='api_auth'),
-    path('activate/<uidb64>/<token>/', activate, name='activate'),
-    path('favicon.ico', RedirectView.as_view(
-        url='/static/images/favicon.ico'), name='favicon'),
 ]

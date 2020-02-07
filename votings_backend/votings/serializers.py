@@ -17,7 +17,6 @@ class QuestionSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         validated_data['author'] = user
         choices = validated_data.pop('choices')
-        # TODO: check that user can't set 'votes' value
         question = Question.objects.create(**validated_data)
         for choice in choices:
             Choice.objects.create(question=question, **choice)
@@ -28,6 +27,18 @@ class QuestionSerializer(serializers.ModelSerializer):
         instance.description = validated_data.get(
             'description', instance.description)
         instance.public = validated_data.get('public', instance.public)
+
+        for choice in instance.choices.all():
+            choice.votes = 0
+            choice.save()
+
+        choices = validated_data.get('choices')
+
+        if choices:
+            instance.choices.all().delete()
+            for choice in choices:
+                Choice.objects.create(label=choice['label'], question=instance)
+
         saved = instance.save()
         return validated_data
 
