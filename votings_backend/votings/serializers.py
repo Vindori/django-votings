@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Question, Choice
+from .models import Question, Choice, Voter
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -36,6 +36,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
         if choices:
             instance.choices.all().delete()
+            Voter.objects.filter(question=instance).delete()
             for choice in choices:
                 Choice.objects.create(label=choice['label'], question=instance)
 

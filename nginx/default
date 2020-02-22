@@ -1,0 +1,16 @@
+server {
+	listen 80 default_server;
+
+	location / {
+		root /frontend/;
+		index index.html;
+	}
+
+	location /static/ {
+		root /frontend;
+	}
+
+	location /api/ {
+		proxy_pass http://backend:8000/api/;
+	}
+}

@@ -11,6 +11,7 @@ router.register(r'questions', views.QuestionViewSet, basename='questions')
 urlpatterns = [
 	path('api/auth/', views.AuthAPI.as_view(), name='auth-api'),
 	path('api/vote/', views.VoteAPI.as_view(), name='vote-api'),
+	path('api/report/', views.ReportAPI.as_view(), name='report-api'),
     path('api/activate/<uidb64>/<token>/', views.activate, name='activate'),
 	path('api/', include(router.urls)),
 ]

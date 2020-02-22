@@ -7,7 +7,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.conf import settings
 
-from .models import Question, Choice, Voter
+from .models import Question, Choice, Voter, Report
 from .tokens import account_activation_token
 from .serializers import QuestionSerializer, ChoiceSerializer
 
@@ -53,6 +53,36 @@ class VoteAPI(APIView):
             return Response(
                 {'error': 'No such choice.'},
                 status=404)
+
+
+class ReportAPI(APIView):
+
+    def get(self, request):
+        return Response(
+            {'error': 'Method GET is not allowed.'},
+            status=405)
+
+    def post(self, request):
+        data = dict(request.data)
+        description = data.get('description')
+        question_token = data.get('access_token')
+        if not description:
+            return Response(
+                {'error': 'You must be authenticated.'},
+                status=401)
+        user = request.user
+
+        if not user.is_authenticated:
+            user = User.objects.all()[0]
+        question = Question.objects.filter(pk=question_token)[0]
+        Report.objects.create(
+            user=user,
+            question=question,
+            description=description
+        )
+        return Response(
+            {'success': 'Your report has been sent.'},
+            status=200)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

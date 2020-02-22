@@ -390,6 +390,10 @@
             },
         },
         mounted: function() {
+            if (localStorage.token == null)
+            {
+                localStorage.token = '';
+            }
             this.token = localStorage.token;
             if (this.token) {
                 this.$http.defaults.headers.common["Authorization"] = `Token ${this.token}`;
